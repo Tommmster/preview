@@ -1,0 +1,22 @@
+#ifndef __REGDEF_H__
+#define __REGDEF_H__
+
+#define sysreg_read(reg)         __builtin_mfsr(SYSREG_##reg)
+#define sysreg_write(reg, value) __builtin_mtsr(SYSREG_##reg, value)
+
+#define SYSREG_SR       0x0000 /* Status register */
+#define SYSREG_EVBA     0X0004 /* Exception vector base address */
+
+#define SYSREG_TLBEHI   0x0110
+#define SYSREG_TLBELO   0x0114
+#define SYSREG_TLBEAR   0x011C /* Faulting virtual address */ 
+#define SYSREG_MMUCR    0x0120 /* MMU Control register */
+#define SYSREG_TLBARLO  0x0124 /* Faulting virtual address */ 
+#define SYSREG_BEAR	0x013c
+
+#define SR_EM_BIT	21     /*Status register Exceptions Masked bit*/
+
+#define SYSREG_DRP_SIZE    5
+#define SYSREG_DRP_OFFSET  14
+
+#endif /* __REGDEF_H__ */

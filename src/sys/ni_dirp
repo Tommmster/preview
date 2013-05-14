@@ -1,0 +1,143 @@
+./kern/kern_exec.c:	ndp->ni_cnd.cn_nameiop = LOOKUP;
+./kern/kern_exec.c:	ndp->ni_cnd.cn_flags = FOLLOW | LOCKLEAF | SAVENAME | TRYEMULROOT;
+./kern/kern_exec.c:	epp->ep_vp = vp = ndp->ni_vp;
+./kern/kern_exec.c:	error = veriexec_verify(l, vp, ndp->ni_cnd.cn_pnbuf,
+./kern/kern_exec.c:	error = pax_segvguard(l, vp, ndp->ni_cnd.cn_pnbuf, false);
+./kern/kern_exec.c:	PNBUF_PUT(ndp->ni_cnd.cn_pnbuf);
+./kern/kern_exec.c:	PNBUF_PUT(ndp->ni_cnd.cn_pnbuf);
+./kern/vfs_syscalls.c:	vp = ndp->ni_vp;
+./kern/vfs_lookup.c:	struct componentname *cnp = &ndp->ni_cnd;
+./kern/vfs_lookup.c:	printf("[XXXAVR32] %s %s %d ndp->ni_segflg == UIO_SYSSPACE? %d\n", __FILE__, __FUNCTION__, __LINE__, ndp->ni_segflg == UIO_SYSSPACE);
+./kern/vfs_lookup.c:	if (ndp->ni_segflg == UIO_SYSSPACE)
+./kern/vfs_lookup.c:		error = copystr(ndp->ni_dirp, cnp->cn_pnbuf,
+./kern/vfs_lookup.c:			    MAXPATHLEN, &ndp->ni_pathlen);
+./kern/vfs_lookup.c:		error = copyinstr(ndp->ni_dirp, cnp->cn_pnbuf,
+./kern/vfs_lookup.c:			    MAXPATHLEN, &ndp->ni_pathlen);
+./kern/vfs_lookup.c:	printf("[XXXAVR32] %s %s %d ndp->ni_dirp:[%s]\n", __FILE__, __FUNCTION__, __LINE__, ndp->ni_dirp);	
+./kern/vfs_lookup.c:	printf("[XXXAVR32] %s %s %d error: %d , ndp->ni_pathlen %d\n", __FILE__, __FUNCTION__, __LINE__, error, ndp->ni_pathlen);	
+./kern/vfs_lookup.c:	if (!error && ndp->ni_pathlen == 1){
+./kern/vfs_lookup.c:		ndp->ni_vp = NULL;
+./kern/vfs_lookup.c:	ndp->ni_loopcnt = 0;
+./kern/vfs_lookup.c:	ndp->ni_rootdir = dp;
+./kern/vfs_lookup.c:				dp = ndp->ni_erootdir;
+./kern/vfs_lookup.c:					ndp->ni_erootdir = NULL;
+./kern/vfs_lookup.c:					ndp->ni_erootdir = dp;
+./kern/vfs_lookup.c:			ndp->ni_rootdir = rootvnode;
+./kern/vfs_lookup.c:			ndp->ni_erootdir = NULL;
+./kern/vfs_lookup.c:		ndp->ni_erootdir = NULL;
+./kern/vfs_lookup.c:		if (ndp->ni_erootdir != NULL) {
+./kern/vfs_lookup.c:				emul_path = ndp->ni_next;
+./kern/vfs_lookup.c:			    cnp->cn_pnbuf, ndp->ni_pathlen);
+./kern/vfs_lookup.c:			ktrnamei(cnp->cn_pnbuf, ndp->ni_pathlen);
+./kern/vfs_lookup.c:		ndp->ni_startdir = dp;
+./kern/vfs_lookup.c:			if (ndp->ni_dvp) {
+./kern/vfs_lookup.c:				vput(ndp->ni_dvp);
+./kern/vfs_lookup.c:			if (ndp->ni_erootdir != NULL) {
+./kern/vfs_lookup.c:			if ((cnp->cn_flags & LOCKPARENT) == 0 && ndp->ni_dvp) {
+./kern/vfs_lookup.c:				if (ndp->ni_dvp == ndp->ni_vp) {
+./kern/vfs_lookup.c:					vrele(ndp->ni_dvp);
+./kern/vfs_lookup.c:					vput(ndp->ni_dvp);
+./kern/vfs_lookup.c:		if (ndp->ni_loopcnt++ >= MAXSYMLINKS) {
+./kern/vfs_lookup.c:		if (ndp->ni_vp->v_mount->mnt_flag & MNT_SYMPERM) {
+./kern/vfs_lookup.c:			error = VOP_ACCESS(ndp->ni_vp, VEXEC, cnp->cn_cred);
+./kern/vfs_lookup.c:		if (ndp->ni_pathlen > 1)
+./kern/vfs_lookup.c:		error = VOP_READLINK(ndp->ni_vp, &auio, cnp->cn_cred);
+./kern/vfs_lookup.c:			if (ndp->ni_pathlen > 1)
+./kern/vfs_lookup.c:		    (linklen + ndp->ni_pathlen >= MAXPATHLEN)) {
+./kern/vfs_lookup.c:		if (ndp->ni_pathlen > 1) {
+./kern/vfs_lookup.c:			memcpy(cp + linklen, ndp->ni_next, ndp->ni_pathlen);
+./kern/vfs_lookup.c:		ndp->ni_pathlen += linklen;
+./kern/vfs_lookup.c:		vput(ndp->ni_vp);
+./kern/vfs_lookup.c:		dp = ndp->ni_dvp;
+./kern/vfs_lookup.c:			dp = ndp->ni_erootdir;
+./kern/vfs_lookup.c:				ndp->ni_erootdir = NULL;
+./kern/vfs_lookup.c:				dp = ndp->ni_rootdir;
+./kern/vfs_lookup.c:	KASSERT(ndp->ni_dvp != ndp->ni_vp);
+./kern/vfs_lookup.c:	vput(ndp->ni_dvp);
+./kern/vfs_lookup.c:	vput(ndp->ni_vp);
+./kern/vfs_lookup.c:	ndp->ni_vp = NULL;
+./kern/vfs_lookup.c: *	identify next component of name at ndp->ni_ptr
+./kern/vfs_lookup.c:	struct componentname *cnp = &ndp->ni_cnd;
+./kern/vfs_lookup.c:	ndp->ni_dvp = NULL;
+./kern/vfs_lookup.c:	dp = ndp->ni_startdir;
+./kern/vfs_lookup.c:	ndp->ni_startdir = NULLVP;
+./kern/vfs_lookup.c:		ndp->ni_pathlen -= cp - cnp->cn_nameptr;
+./kern/vfs_lookup.c:			ndp->ni_vp = dp;
+./kern/vfs_lookup.c:		ndp->ni_dvp = NULL;
+./kern/vfs_lookup.c:	ndp->ni_pathlen -= cnp->cn_namelen;
+./kern/vfs_lookup.c:	ndp->ni_next = cp;
+./kern/vfs_lookup.c:		slashes = cp - ndp->ni_next;
+./kern/vfs_lookup.c:		ndp->ni_pathlen -= slashes;
+./kern/vfs_lookup.c:		ndp->ni_next = cp;
+./kern/vfs_lookup.c:			if (dp == ndp->ni_rootdir || dp == rootvnode) {
+./kern/vfs_lookup.c:				ndp->ni_dvp = dp;
+./kern/vfs_lookup.c:				ndp->ni_vp = dp;
+./kern/vfs_lookup.c:			if (ndp->ni_rootdir != rootvnode) {
+./kern/vfs_lookup.c:				retval = vn_isunder(dp, ndp->ni_rootdir, l);
+./kern/vfs_lookup.c:				    dp = ndp->ni_rootdir;
+./kern/vfs_lookup.c:				    ndp->ni_dvp = dp;
+./kern/vfs_lookup.c:				    ndp->ni_vp = dp;
+./kern/vfs_lookup.c:	ndp->ni_dvp = dp;
+./kern/vfs_lookup.c:	ndp->ni_vp = NULL;
+./kern/vfs_lookup.c:	error = VOP_LOOKUP(dp, &ndp->ni_vp, cnp);
+./kern/vfs_lookup.c:		if (ndp->ni_vp != NULL)
+./kern/vfs_lookup.c:		 * (possibly locked) directory vnode in ndp->ni_dvp.
+./kern/vfs_lookup.c:			ndp->ni_startdir = ndp->ni_dvp;
+./kern/vfs_lookup.c:			VREF(ndp->ni_startdir);
+./kern/vfs_lookup.c:		ndp->ni_pathlen -= cnp->cn_consume - slashes;
+./kern/vfs_lookup.c:		ndp->ni_next += cnp->cn_consume - slashes;
+./kern/vfs_lookup.c:		if (ndp->ni_next[0] == '\0')
+./kern/vfs_lookup.c:	dp = ndp->ni_vp;
+./kern/vfs_lookup.c:	 * "dp" and "ndp->ni_dvp" are both locked and held,
+./kern/vfs_lookup.c:		KASSERT(ndp->ni_dvp != dp);
+./kern/vfs_lookup.c:		VOP_UNLOCK(ndp->ni_dvp, 0);
+./kern/vfs_lookup.c:			vn_lock(ndp->ni_dvp, LK_EXCLUSIVE | LK_RETRY);
+./kern/vfs_lookup.c:		ndp->ni_vp = dp = tdp;
+./kern/vfs_lookup.c:		vn_lock(ndp->ni_dvp, LK_EXCLUSIVE | LK_RETRY);
+./kern/vfs_lookup.c:		vn_lock(ndp->ni_vp, LK_EXCLUSIVE | LK_RETRY);
+./kern/vfs_lookup.c:		ndp->ni_pathlen += slashes;
+./kern/vfs_lookup.c:		ndp->ni_next -= slashes;
+./kern/vfs_lookup.c:		KASSERT(dp != ndp->ni_dvp);
+./kern/vfs_lookup.c:		cnp->cn_nameptr = ndp->ni_next;
+./kern/vfs_lookup.c:		if (ndp->ni_dvp == dp) {
+./kern/vfs_lookup.c:			vrele(ndp->ni_dvp);
+./kern/vfs_lookup.c:			vput(ndp->ni_dvp);
+./kern/vfs_lookup.c:	if (dp == ndp->ni_erootdir) {
+./kern/vfs_lookup.c:		if (ndp->ni_dvp == dp)
+./kern/vfs_lookup.c:			if (ndp->ni_dvp != NULL)
+./kern/vfs_lookup.c:				vput(ndp->ni_dvp);
+./kern/vfs_lookup.c:		ndp->ni_dvp = NULL;
+./kern/vfs_lookup.c:		dp = ndp->ni_rootdir;
+./kern/vfs_lookup.c:		ndp->ni_vp = dp;
+./kern/vfs_lookup.c:	if (ndp->ni_dvp == NULL && cnp->cn_nameiop != LOOKUP) {
+./kern/vfs_lookup.c:		if (dp != ndp->ni_dvp) {
+./kern/vfs_lookup.c:	if (ndp->ni_dvp != NULL) {
+./kern/vfs_lookup.c:			ndp->ni_startdir = ndp->ni_dvp;
+./kern/vfs_lookup.c:			VREF(ndp->ni_startdir);
+./kern/vfs_lookup.c:	ndp->ni_vp = NULL;
+./kern/vfs_vnops.c:	ndp->ni_cnd.cn_flags &= TRYEMULROOT;
+./kern/vfs_vnops.c:		ndp->ni_cnd.cn_nameiop = CREATE;
+./kern/vfs_vnops.c:		ndp->ni_cnd.cn_flags |= LOCKPARENT | LOCKLEAF;
+./kern/vfs_vnops.c:			ndp->ni_cnd.cn_flags |= FOLLOW;
+./kern/vfs_vnops.c:		ndp->ni_cnd.cn_nameiop = LOOKUP;
+./kern/vfs_vnops.c:		ndp->ni_cnd.cn_flags |= LOCKLEAF;
+./kern/vfs_vnops.c:			ndp->ni_cnd.cn_flags |= FOLLOW;
+./kern/vfs_vnops.c:	VERIEXEC_PATH_GET(ndp->ni_dirp, ndp->ni_segflg, ndp->ni_dirp, path);
+./kern/vfs_vnops.c:	vp = ndp->ni_vp;
+./kern/vfs_vnops.c:	error = veriexec_openchk(l, ndp->ni_vp, ndp->ni_dirp, fmode);
+./kern/vfs_vnops.c:		if (ndp->ni_vp == NULL) {
+./kern/vfs_vnops.c:			error = VOP_CREATE(ndp->ni_dvp, &ndp->ni_vp,
+./kern/vfs_vnops.c:					   &ndp->ni_cnd, &va);
+./kern/vfs_vnops.c:			vp = ndp->ni_vp;
+./kern/vfs_vnops.c:			VOP_ABORTOP(ndp->ni_dvp, &ndp->ni_cnd);
+./kern/vfs_vnops.c:			if (ndp->ni_dvp == ndp->ni_vp)
+./kern/vfs_vnops.c:				vrele(ndp->ni_dvp);
+./kern/vfs_vnops.c:				vput(ndp->ni_dvp);
+./kern/vfs_vnops.c:			ndp->ni_dvp = NULL;
+./kern/vfs_vnops.c:			vp = ndp->ni_vp;
+./kern/vfs_vnops.c:		vp = ndp->ni_vp;
+./kern/vfs_vnops.c:	if (ndp->ni_vp->v_type == VLNK) {
+Binary file ./kern/vfs_lookup.o matches
+./kern/kern_subr.c:	ndp->sfd_fn = fn;
+./kern/kern_subr.c:	ndp->sfd_arg = arg;
+./kern/kern_subr.c:	strlcpy(ndp->sfd_name, name, sizeof(ndp->sfd_name));

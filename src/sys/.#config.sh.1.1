@@ -1,0 +1,13 @@
+#! /bin/sh
+
+# if test -e arch/machine; then :; else
+# 	ln -s avr32 arch/machine;
+# fi
+
+if test -e inc/avr32; then :; else
+	ln -s arch/avr32/include inc/avr32;
+fi
+
+if test -e inc/machine; then :; else
+	ln -s arch/avr32/include inc/machine;
+fi

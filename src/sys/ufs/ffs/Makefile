@@ -1,0 +1,24 @@
+SRC_DIR=../../..
+SYS_DIR=$(SRC_DIR)/sys
+
+MACHINE_INCLUDE=$(SYS_DIR)/inc/
+OPT_DIR=$(SYS_DIR)/opt
+
+INCLUDES=-I$(MACHINE_INCLUDE) -I$(OPT_DIR)  -I$(SYS_DIR)   -I$(SRC_DIR)/common/include  -I$(SYS_DIR)/dev
+
+AVR32_CC=avr32-gcc
+
+AVR32_CFLAGS= -mrelax -mno-pic -march=ap -nostdinc -nostdlib -ffreestanding -D_KERNEL -D__NetBSD__ -DVMSWAP -Ulinux -U__linux__ $(INCLUDES)
+
+#SOURCES=$(shell find . -maxdepth 1 -name \*.c)
+SOURCES=ffs_alloc.c ffs_balloc.c ffs_inode.c ffs_snapshot.c ffs_subr.c ffs_tables.c ffs_vfsops.c ffs_vnops.c ffs_softdep.stub.c
+
+OBJECTS=$(patsubst %.c, %.o, $(SOURCES))
+
+all: $(OBJECTS)
+	:
+	
+%.o:%.c
+	$(AVR32_CC) $(AVR32_CFLAGS) -c $<
+clean:
+	rm -rf *.o

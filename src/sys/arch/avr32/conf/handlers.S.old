@@ -1,0 +1,150 @@
+#include "interrupts_msgs.h"
+#include <avr32/regdef.h>
+
+
+	.section .ex.text,"ax",@progbits
+	.align 2
+exception_vectors:
+	bral	unrecov_excep_handler
+	.align 2
+	bral	multiple_tlbhit_handler
+	.align 2
+	bral databus_datafetch_handler
+	.align 2
+	bral databus_instfetch_handler
+	.align 2
+	bral external_nmi_handler
+	.align 2
+	bral instruction_address_handler
+	.align 2
+	bral	itlb_protection_handler
+	.align 2
+	bral	breakpoint_handler	
+	.align 2
+	bral	illegal_opcode_handler	
+	.align 2
+	bral unimplemented_instruction_handler	
+	.align 2
+	bral privilege_violation_handler
+	.align 2
+	bral copprocesor_absent_handler
+	.align 2
+	bral read_data_address_handler
+	.align 2
+	bral write_data_address_handler
+	.align 2
+	bral read_dtlb_protection_handler
+	.align 2
+	bral write_dtlb_protection_handler
+	.align 2
+	bral dtlb_modified_handler
+
+
+itlb_miss_handler:
+	lda.w	r12, _itlb_miss_msg
+	rcall panic
+	rete
+
+read_dtlb_miss_handler:
+	lda.w	r12, _dtlb_rmiss_msg
+	rcall panic
+	rete
+
+write_dtlb_miss_handler:
+	lda.w	r12, _dtlb_wmiss_msg
+	rcall panic
+	rete
+
+supervisor_call_handler:
+	lda.w	r12, _inst_scall_msg
+	rcall panic
+	rete
+
+
+unrecov_excep_handler:
+	lda.w r12,_int_unrec_msg
+	rcall panic
+	rete
+	
+multiple_tlbhit_handler:
+	lda.w	r12, _int_tlbmult_msg
+	rcall panic
+	rete
+
+databus_datafetch_handler:
+	lda.w	r12, _dbus_dfetch_msg
+	mfsr	r11,SYSREG_BEAR	/* XXXAVR32: Bus error address register: p. addr. that caused a data bus error. */
+	rcall panic	
+	rete
+
+databus_instfetch_handler:
+	lda.w	r12, _dbus_ifetch_msg
+	rcall panic
+	rete
+
+external_nmi_handler:
+	lda.w	r12, _ext_nmi_msg
+	rcall panic
+	rete
+
+instruction_address_handler:
+	lda.w	r12, _itlb_iaddress_msg
+	rcall panic
+	rete
+
+itlb_protection_handler:
+	lda.w	r12, _itlb_iprot_msg
+	rcall panic
+	rete
+
+breakpoint_handler:
+	lda.w	r12, _ocd_break_msg
+	rcall panic
+	rete
+
+illegal_opcode_handler:
+	lda.w	r12, _inst_opcode_msg
+	rcall panic
+	rete
+
+unimplemented_instruction_handler:
+	lda.w	r12, _inst_unimp_msg
+	rcall panic
+	rete
+
+privilege_violation_handler:
+	lda.w	r12, _inst_pviol_msg
+	rcall panic
+	rete
+
+copprocesor_absent_handler:
+	lda.w	r12, _inst_cop_msg
+	rcall panic
+	rete
+
+read_data_address_handler:
+	lda.w	r12, _dtlb_daddressr_msg
+	rcall panic
+	rete
+
+write_data_address_handler:
+	lda.w	r12, _dtlb_daddressw_msg
+	rcall panic
+	rete
+
+read_dtlb_protection_handler:
+	lda.w	r12, _dtlb_protr_msg
+	rcall panic
+	rete
+
+write_dtlb_protection_handler:
+	lda.w	r12, _dtlb_protw_msg
+	rcall panic
+	rete
+
+dtlb_modified_handler:
+	lda.w	r12, _dtlb_modif_msg
+	rcall panic
+	rete
+
+

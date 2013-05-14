@@ -1,0 +1,54 @@
+Index: vmlinux.lds
+===================================================================
+RCS file: /home/cvs/netbsd-avr32/src/sys/arch/avr32/conf/vmlinux.lds,v
+retrieving revision 1.9
+diff -r1.9 vmlinux.lds
+19a20
+> 
+20a22
+> 
+22a25
+> 
+24a28
+> 
+26a31
+> 
+28a34
+> 
+30a37
+> 
+34a42
+> 
+41a50
+> 
+42a52
+> 
+49a60
+> 
+56a68
+> 
+57a70
+> 
+65a79
+> 
+66a81
+> 
+72a88
+> 
+80a97
+> 
+83a101
+> 
+89a108
+> 
+93a113
+> 
+98d117
+< /* jiffies = jiffies_64 + 4; */
+149c168,171
+< *(.gnu.warning)
+---
+>   . = 0x100;
+>   *(.scall.text)
+>   *(.irq.text)
+>   *(.gnu.warning)
