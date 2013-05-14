@@ -1,0 +1,7 @@
+#dev versioning info
+CVS/
+
+#Compiled source
+*.o
+
+\#*
