@@ -4,4 +4,4 @@ CVS/
 #Compiled source
 *.o
 
-\#*
+.\#*
