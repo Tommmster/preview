@@ -85,5 +85,5 @@ cpu_initclocks(void)
 void
 setstatclockrate(int newhz)
 {
-	panic("setstatclockrate: notyet");	
+	/* nothing we can do */
 }

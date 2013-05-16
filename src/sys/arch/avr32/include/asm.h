@@ -57,16 +57,6 @@
 #include <machine/cdefs.h>	/* for API selection */
 #include <avr32/cpuregs.h>
 
-#ifdef __NO_LEADING_UNDERSCORES__
-# define _C_LABEL(x)	x
-#else
-# ifdef __STDC__
-#  define _C_LABEL(x)	_ ## x
-# else
-#  define _C_LABEL(x)	_/**/x
-# endif
-#endif
-
 #ifdef USE_AENT
 #define AENT(x)				\
 	.aent	x, 0
