@@ -1,23 +1,23 @@
-SRC_DIR=../../../../../..
-SYS_DIR=$(SRC_DIR)/sys
+AVR32_CC = avr32-gcc 
+SRC_ROOT = ../../../../../..
 
-MACHINE_INCLUDE=$(SYS_DIR)/inc/
-OPT_DIR=$(SYS_DIR)/opt
+AVR32_CFLAGS=-mrelax -mno-pic -march=ap -nostdlib -nostdinc -ffreestanding -D_KERNEL -D__NetBSD__ -DVMSWAP -Ulinux -U__linux__ -I. -I$(SRC_ROOT) -I$(SRC_ROOT)/common/lib/libc \
+		-I$(SRC_ROOT)/sys -I$(SRC_ROOT)/sys/opt \
+		-I$(SRC_ROOT)/sys/inc -I$(SRC_ROOT)/common/include \
+		-I$(SRC_ROOT)/sys/compat -ffixed-r1
+AVR32_LDFLAGS= -mrelax -mno-pic -march=ap -nostdlib -nostdinc -Wl,-T,../vmlinux.lds
 
-INCLUDE_DIR=$(SRC_DIR)/include
-
-INCLUDES=-I$(MACHINE_INCLUDE) -I$(OPT_DIR)  -I$(SYS_DIR)   -I$(SRC_DIR)/common/include  -I$(SYS_DIR)/dev -I$(INCLUDE_DIR)
-
-AVR32_CC=avr32-gcc
-
-AVR32_CFLAGS= -mrelax -mno-pic -march=ap -nostdinc -nostdlib -ffreestanding -ffixed-r1 -D_KERNEL -D__NetBSD__ $(INCLUDES)
-
-SOURCES=$(shell find . -name \*.S)
-OBJECTS=$(patsubst %.S, %.o, $(SOURCES))
+SOURCES = $(shell find . -name \*.c -or -name \*.S)
+OBJECTS = $(patsubst %.c, %.o, $(SOURCES)) $(patsubst %.S, %.o, $(SOURCES))
 
 all: $(OBJECTS)
- 	:
-%.o:%.S
-	$(AVR32_CC) $(AVR32_CFLAGS) -c $<
+	:
+
 clean:
 	rm -rf *.o
+
+%.o: %.c
+	$(AVR32_CC) $(AVR32_CFLAGS) -c $<
+
+%.o: %.S
+	$(AVR32_CC) $(AVR32_CFLAGS) -c $<
