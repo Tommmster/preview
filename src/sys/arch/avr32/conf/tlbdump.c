@@ -1,5 +1,6 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/*	$NetBSD$	*/
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation

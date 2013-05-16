@@ -129,11 +129,11 @@
 #define AVR32_MMUCR_DRP_SHIFT	14
 #define AVR32_MMUCR_DRP(x)	((x) << AVR32_MMUCR_DRP_SHIFT)
 
-#define AVR32_MMUCR_SMMU	0x00000010
-#define AVR32_MMUCR_NF		0x00000008
-#define AVR32_MMUCR_TLB_INV	0x00000004
-#define AVR32_MMUCR_SHARED	0x00000002
-#define AVR32_MMUCR_PMMU	0x00000001
+#define AVR32_MMUCR_SMMU	0x00000010 /* Enable segmentation */
+#define AVR32_MMUCR_NF		0x00000008 /* TLB entry not found */
+#define AVR32_MMUCR_TLB_INV	0x00000004 /* TLB invalidate bit */
+#define AVR32_MMUCR_SHARED	0x00000002 /* Shared virtual space */
+#define AVR32_MMUCR_PMMU	0x00000001 /* Enable paging */
 
 /*
  * Configuration registers.

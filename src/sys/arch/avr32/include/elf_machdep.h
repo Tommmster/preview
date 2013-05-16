@@ -1,4 +1,6 @@
-/*-                                                                                                                                                                                   
+/*	$NetBSD$	*/  
+
+/*-
  * Copyright (c) 2008 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
@@ -27,8 +29,8 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#define ELF32_MACHDEP_ID_CASES                                          \
-                case EM_AVR32:                                          \
+#define ELF32_MACHDEP_ID_CASES	\
+                case EM_AVR32:	\
                         break;
 
 #define ARCH_ELFSIZE 32

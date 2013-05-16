@@ -1,6 +1,7 @@
 /*	$NetBSD: endian.h,v 1.19 2000/03/17 00:09:22 mycroft Exp $	*/
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
