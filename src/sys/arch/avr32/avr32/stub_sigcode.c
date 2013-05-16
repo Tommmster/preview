@@ -35,11 +35,11 @@
 void
 linux_sigcode(void)
 {
-	panic(__FUNCTION__);
+	panic(linux_sigcode);
 }
 
 void
 linux_esigcode(void)
 {
-	panic(__FUNCTION__);
+	panic(linux_esigcode);
 }

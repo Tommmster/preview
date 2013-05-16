@@ -33,5 +33,5 @@
 void
 linux_syscall_intern(struct proc *l)
 {
-	panic(__FUNCTION__);
+	panic("linux_syscall_intern");
 }
