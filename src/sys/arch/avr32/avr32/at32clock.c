@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -85,6 +87,7 @@ static struct at32clock_softc *at32clock_sc;
 
 static struct evcnt at32clock_evcnt =
     EVCNT_INITIALIZER(EVCNT_TYPE_INTR, NULL, "at32clock", "compare (clock)");
+
 static struct evcnt at32clock_missed_evcnt =
     EVCNT_INITIALIZER(EVCNT_TYPE_INTR, NULL, "at32clock", "missed compare int");
 

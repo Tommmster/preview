@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -158,20 +160,20 @@ cpu_setfunc(struct lwp *l, void (*func)(void *), void *arg)
 void
 cpu_swapin(struct lwp *l)
 {
-	panic("cpu_swapin");
+	panic("cpu_swapin: notyet");
 }
 
 void
 cpu_swapout(struct lwp *l)
 {
-	panic("cpu_swapout");
+	panic("cpu_swapout: notyet");
 }
 
 void
 cpu_lwp_free(struct lwp *l, int proc)
 {
 
-#if 0
+#if notyet
 	if ((l->l_md.md_flags & MDP_FPUSED) && l == fpcurlwp)
 		fpcurlwp = NULL; 
 #endif
@@ -189,7 +191,7 @@ cpu_lwp_free2(struct lwp *l)
 int
 cpu_coredump(struct lwp *l, void *iocookie, struct core *chdr)
 {
-	panic("cpu_coredump");	
+	panic("cpu_coredump: notyet");	
 }
 #endif
 
@@ -199,7 +201,7 @@ cpu_coredump(struct lwp *l, void *iocookie, struct core *chdr)
 void
 vmapbuf(struct buf *bp, vsize_t len)
 {
-	panic("vmapbuf");
+	panic("vmapbuf: notyet");
 }
 
 /*
@@ -208,7 +210,7 @@ vmapbuf(struct buf *bp, vsize_t len)
 void
 vunmapbuf(struct buf *bp, vsize_t len)
 {
-	panic("vunmapbuf");
+	panic("vunmapbuf: notyet");
 }
 
 /*
@@ -217,6 +219,6 @@ vunmapbuf(struct buf *bp, vsize_t len)
 paddr_t
 kvtophys(vaddr_t kva)
 {
-	panic("kvtophys");
+	panic("kvtophys: notyet");
 	return 0;
 }

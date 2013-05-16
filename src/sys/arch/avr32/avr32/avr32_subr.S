@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -126,7 +128,7 @@ cpu_switch_resume:
 	ldm	sp++, pc
 	.size cpu_switch_resume, . - cpu_switch_resume
 
-#if 0
+#if notyet
 /*
  * Invalidate TLB entries belong to per process user spaces while
  * leaving entries for kernel entries for kernel space marked global intact.
@@ -137,9 +139,7 @@ cpu_switch_resume:
 	.align 1
 avr32_tbiap:
 	
-	#while n < 32
-1:
-	cp.w r12, 32
+1:	cp.w r12, 32
 	brge 2f
 
 	#TODO Update DRP
@@ -160,7 +160,6 @@ avr32_tbiap:
 	tlbw
 	
 3:
-2:
-	nop
+2:	nop
 	.end avr32_tbiap
 #endif

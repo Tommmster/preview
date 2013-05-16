@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -28,19 +30,16 @@
  */
 
 #include <sys/cdefs.h>
-#include <sys/types.h>
+#include <sys/param.h>
 #include <sys/systm.h>
+#include <sys/kernel.h>
+#include <sys/types.h>
 #include <sys/time.h>
 #include <sys/timetc.h>
 #include <sys/cpu.h>
 
-#include <avr32/avr32_clock.h>
 #include <avr32/sysconf.h>
 #include <avr32/locore.h>
-
-void avr32_clockintr(struct clockframe *cf);
-
-u_int32_t next_clock_intr;
 
 /* 
  * platform_clock_attach:
@@ -54,65 +53,37 @@ platform_clock_attach(void *ctx, struct platform_clock *clock)
 	platform.clock = clock;
 }
 
+/*
+ * cpu_initclocks:
+ *
+ *      starts periodic timer, which provides hardclock interrupts to
+ *      kern_clock.c.
+ *      Leave stathz 0 since there are no other timers available.
+ */
 void
-cpu_initclocks()
+cpu_initclocks(void)
 {
-	//Disable interrupts setting the compare register to its highest value.
-	avr32_compare_write(~0u);
-	avr32_count_write(0u);
+	struct platform_clock *clock = platform.clock;
 
-	avr32_tc_init();
+	if (clock == NULL)
+		panic("cpu_initclocks: no clock attached");
 
-	_splnone();
+	hz = clock->hz;
+	tick = 1000000 / hz;
+
+	/* start periodic timer */
+	(*clock->init)(clock->self);
 }
 
-
-void
-avr32_clockintr(struct clockframe *cf)
-{
-	u_int32_t new_cnt;
-
-	next_clock_intr += curcpu()->ci_cycles_per_hz;
-
-	avr32_compare_write(next_clock_intr);
-
-	/* Check for lost interrupts */
-	new_cnt = avr32_count_read();
-
-	/*
-	 * Missed one or more clock interrupts, so lets
-	 * start counting again from the current value.
-	 */
-	if ((next_clock_intr - new_cnt) & 0x80000000) {
-
-		next_clock_intr = new_cnt + curcpu()->ci_cycles_per_hz;
-		avr32_compare_write(next_clock_intr);
-
-	}
-
-	hardclock(cf);
-
-	/* caller should re-enable interrupts */
-}
-
+/*
+ * setstatclockrate:
+ *
+ *      We assume newhz is either stathz or profhz, and that neither will
+ *      change after being set up above.  Could recalculate intervals here
+ *      but that would be a drag.
+ */
 void
 setstatclockrate(int newhz)
 {
-	panic("setstatclockrate");	
-}
-
-void
-avr32_tc_init(void)
-{
-	static struct timecounter tc = {
-		.tc_get_timecount = (timecounter_get_t *)avr32_count_read,
-		.tc_poll_pps = 0,
-		.tc_counter_mask = ~0u, 
-		.tc_frequency = 0,
-		.tc_name = "name",
-		.tc_quality = 100,
-	};
-
-	tc.tc_frequency = curcpu()->ci_cpu_freq;
-	tc_init (&tc);
+	panic("setstatclockrate: notyet");	
 }

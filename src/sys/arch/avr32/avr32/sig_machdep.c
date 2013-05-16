@@ -1,3 +1,4 @@
+/* 	$NetBSD$	 */
 /*-                                                                                                                                                                                   
  * Copyright (c) 2008 The NetBSD Foundation, Inc.
  * All rights reserved.
@@ -40,5 +41,5 @@
 void    
 sendsig(const ksiginfo_t *ksi, const sigset_t *mask)
 {   
-	panic("sendsig");
+	panic("sendsig: notyet");
 }

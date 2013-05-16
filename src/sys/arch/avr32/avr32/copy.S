@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -96,8 +98,7 @@ copystr:
 	cp.w	r10, 0
 	breq	2f	/* No characters to copy */
 
-1:
-	ld.ub	r8, r12[0]
+1:	ld.ub	r8, r12[0]
 	sub	r12, -1
 	sub	r10, 1
 	st.b	r11[0], r8
@@ -122,11 +123,10 @@ copystr:
 	st.w	r9[0], r7
 	bral	3f
 
-4:	
-	mov	r12, 0
+4:	mov	r12, 0
 	bral	2b
-3:
-	ldm	sp++, r7,r8,pc
+
+3:	ldm	sp++, r7,r8,pc
 	.size 	copystr, . - copystr
 
 /*          
@@ -140,14 +140,14 @@ copystr:
 	.align 1
 
 copyout:
-#if 0
+#if notyet
 	stm	--sp, lr
 
 	/* 
-	 * Set copyerr as the error handler
+	 * Set copyerr for exception handling
 	 */
 	lda.w	r8, avr32_curlwp
-	ld.w	r8, r8[0]	#curlwp
+	ld.w	r8, r8[0]
 	ld.w	r8, r8[L_ADDR]
 	lda.w	r9, copyerr
 	ld.w	r9, r9[0]
@@ -170,8 +170,8 @@ copyout:
 	mov	r12, 0	
 	ldm	sp++, pc
 #else
-	lddpc r12, copyout_panic
-	rcall panic
+	lda.w	r12, copyout_panic
+	rcall	panic
 	.size copyout, . -copyout
 
 	.align 2
@@ -184,7 +184,7 @@ copyout_panic:
 	.align 1
 
 copyerr:
-#if 0
+#if notyet
 	stm	--sp, lr
 
 	lda.w	r12, avr32_curlwp
@@ -197,7 +197,7 @@ copyerr:
 	mov	r12, EFAULT
 	ldm	sp++, pc
 #else
-	lddpc	r12,copyerr_panic	
+	lda.w	r12, copyerr_panic	
 	rcall	panic
 	
 copyerr_panic: 
@@ -211,16 +211,12 @@ copyerr_panic:
  * the NIL) in *lencopied.  If the string is too long, return ENAMETOOLONG;
  * else return 0 or EFAULT. 
  */
-
 	.text
 	.globl copyinstr
 	.align 2
 
 copyinstr:
-
 	/* Must use some extra registers */
-
-	
 	stm	--sp, r6-r7,lr
 	mov	r7, r10
 
@@ -245,24 +241,21 @@ copyinstr:
 	cp.w	r10, 0
 	brne	1b
 	
-2:
-	cp.w	r9, 0
+2:	cp.w	r9, 0
 	breq	3f
 	sub	r7, r10
 	st.w	r9[0], r7
 
 	mov	r12, 0
 	
-3:
-	lda.w	r8, avr32_curlwp
+3:	lda.w	r8, avr32_curlwp
 	ld.w	r8, r8[0]
 	ld.w	r8, r8[L_ADDR]
 	mov	r6, 0
 	st.w	r8[U_PCB_ONFAULT], r6
 
-	ldm	sp++,r6-r7, pc
-4:
-	mov	r12, 1
+	ldm	sp++,r6-r7,pc
+4:	mov	r12, 1
 	bral	3b
 	.size copyinstr, . - copyinstr
 
@@ -271,7 +264,7 @@ copyinstr:
 	.align 2
 
 copystrerr:
-	lddpc	r12, copystrerr_panic	
+	lda.w	r12, copystrerr_panic	
 	rcall	panic
 
 	.align 2
@@ -282,23 +275,21 @@ copystrerr_panic:
  * int suword(void *, int)
  * Stores a word of data to the user-space address.
  */   
-
 	.text
 	.globl suword
 	.align 1
 suword:
 	stm	--sp, lr
 
-	/* 
-	 * Set fswberr as the error handler
-	 */
+	/* Set fswberr for exception handling */
 	lda.w	r8, avr32_curlwp
-	ld.w	r8, r8[0]	#curlwp
+	ld.w	r8, r8[0]
 	ld.w	r8, r8[L_ADDR]
 	lda.w	r9, fswberr
 	ld.w	r9, r9[0]
 	st.w	r8[U_PCB_ONFAULT], r9
-		
+
+	/* All set: store word */
 	st.w	r12[0], r11
 
 	mov	r11, 0
@@ -307,7 +298,7 @@ suword:
 	.size suword, . - suword
 
 fswberr:
-	lddpc	r12, fswberr_panic	
+	lda.w	r12, fswberr_panic	
 	rcall panic
 
 fswberr_panic:
@@ -330,13 +321,13 @@ badaddr:
 	lda.w	r9, baderr
 	st.w	r8[U_PCB_ONFAULT], r9
 
-	cp.w	r11, 1
+	cp.w	r11, 1 /* byte */
 	breq	1f
 
-	cp.w	r11, 2
+	cp.w	r11, 2 /* short */
 	breq	2f
 #if 1
-	cp.w	r11, 4
+	cp.w	r11, 4 /* long */
 	breq	4f
 
 	lda.w	r12, L_BADADDR_PANIC_MESG
@@ -346,16 +337,16 @@ L_BADADDR_PANIC_MESG:
 	.asciz "badaddr: invalid len"
 	.align 2
 #endif
-4:
-	ld.w	r10, r12[0]
+4:	ld.w	r10, r12[0]
 	bral	5f
-2:
-	ld.uh	r10, r12[0]
+
+2:	ld.uh	r10, r12[0]
 	bral	5f
-1:
-	ld.ub	r10, r12[0]
+
+1:	ld.ub	r10, r12[0]
 	bral	5f
-5:
-	mov	r12, 0
+
+5:	mov	r12, 0
 	st.w	r8[U_PCB_ONFAULT], r12
 	mov	pc, lr
+	.size badaddr, . - badaddr

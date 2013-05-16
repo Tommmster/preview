@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -53,15 +55,15 @@ _cpu_switchto:
 	mfsr	r9, SR_STATUS
 	nop
 
-	andh	r9, hi(~0x003f0000), COH
+	andh	r9, hi(~(AVR32_STATUS_IM | AVR32_STATUS_EM)), COH
 	st.w	r8++, r9
 	stm	r8, r0-r7,sp,lr
 
 #ifdef IPL_ICU_MASK
 #error IPL_ICU_MASK
 #endif
-1:
-	lda.w	r0, avr32_curlwp 
+
+1:	lda.w	r0, avr32_curlwp 
 	st.w	r0[0], r11
 
 	/*
@@ -117,7 +119,7 @@ _cpu_switchto:
 	 */
 	ld.w	r8, r11[L_ADDR]	/* r0: newlwp->l_addr */
 	ld.w	r9, r8++
-	andh	r9, hi(0x003f0000), COH
+	andh	r9, hi(AVR32_STATUS_IM | AVR32_STATUS_EM), COH
 
 	mfsr	r10, SR_STATUS
 	nop
@@ -161,3 +163,143 @@ lwp_trampoline:
 
 L_LWP_TRAMPOLINE_PANIC:
 	.asciz "lwp_trampoline"
+
+/*
+ * Support routines for the spl(9) infrastructure follow.
+ */
+
+	.align 2
+	.text
+	.globl _spllower
+
+_spllower:
+#if 1
+	/* Fetch a copy of the status register. */
+	mfsr	r8, SR_STATUS
+	nop
+
+	/* Turn off every interrupt bit in the future SR. */
+	mov	r9, r8
+	andh	r9, hi(~AVR32_STATUS_IMx)
+
+	/* Keep every masked interrupt present in r12. */
+	mov	r10, r12
+	andh	r10, hi(AVR32_STATUS_IMx), COH
+
+	/* Assemble the new status register, store back. */
+	or	r9, r10
+	mtsr	SR_STATUS, r9
+	nop
+
+	/* Return previous interrupt level. */
+	mov	r12, r8
+	andh	r12, hi(AVR32_STATUS_IM), COH
+
+	/* Return. */
+	mov	pc, lr
+#else
+	lda.w	r12, L_spllower_msg
+	rcall	panic
+
+	.section .data
+L_spllower_msg:
+	.asciz "_spllower"
+#endif
+
+	.align 2
+	.text
+	.globl _splraise
+
+_splraise:
+#if 1
+	/* Fetch a copy of the status register. */
+	mfsr	r8, SR_STATUS
+	nop
+
+	/* Keep future unmasked interrupt bits. */
+	mov	r9, r12
+	andh	r9, hi(AVR32_STATUS_IMx), COH
+
+	/* Turn on the given bits, retain the rest. */
+	mov	r10, r8
+	or	r10, r9
+
+	/* Store back. */
+	mtsr	SR_STATUS, r10
+	nop
+
+	/* Return previous interrupt level. */
+	mov	r12, r8
+	andh	r12, hi(AVR32_STATUS_IM), COH
+
+	/* Return. */
+	mov	pc, lr
+#else
+	lda.w	r12, L_splraise_msg
+	rcall	panic
+
+	.section .data
+L_splraise_msg:
+	.asciz "_splraise"
+#endif
+
+	.align 2
+	.text
+	.globl _splset
+
+_splset:
+#if 1
+	/* Fetch status register. */
+	mfsr	r8, SR_STATUS
+	nop
+
+	/* Erase every non-interrupt bit in argument. */
+	andh	r12, hi(AVR32_STATUS_IM), COH
+
+	/* Turn off every interrupt bit in SR. */
+	mov	r9, r8
+	andh	r9, hi(~AVR32_STATUS_IM)
+
+	/* Set previous interrupt bits. */
+	or	r9, r12
+
+	/* Store back. */
+	mtsr	SR_STATUS, r9
+	nop
+
+	/* Compute previous interrupt state. */
+	mov	r12, r8
+	andh	r12, hi(AVR32_STATUS_IM), COH
+
+	/* Return. */
+	mov	pc, lr
+#else
+	lda.w	r12, L_splset_msg
+	rcall	panic
+
+	.section .data
+L_splset_msg:
+	.asciz "_splset"
+#endif
+
+	.align 2
+	.text
+	.globl _splget
+
+_splget:
+	lda.w	r12, L_splget_msg
+	rcall	panic
+
+	.section .data
+L_splget_msg:
+	.asciz "_splget"
+
+	.section .text,"ax",@progbits
+	.global _splnone
+_splnone:
+	lda.w	r12, L_splnone_msg
+	rcall	panic
+
+	.section .data
+L_splnone_msg:
+	.asciz "_splnone"

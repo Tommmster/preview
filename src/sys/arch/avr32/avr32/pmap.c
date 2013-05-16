@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -52,7 +54,7 @@ int pmap_pv_lowat = PMAP_PV_LOWAT;
 bool pmap_initialized = false;
 
 #define PAGE_IS_MANAGED(pa)   \
-   (pmap_initialized == true && vm_physseg_find(atop(pa), NULL) != -1)
+	(pmap_initialized == true && vm_physseg_find(atop(pa), NULL) != -1)
 
 /* Forward function declarations */
 void pmap_asid_alloc(pmap_t pmap);
@@ -78,8 +80,8 @@ paddr_t avail_start; /* PA of first available physical page */
 paddr_t avail_end;   /* PA of last available physical page */
 vaddr_t virtual_end; /* VA of last avail page (end of kernel AS) */
 
-struct pv_entry   *pv_table;
-int       pv_table_npages;
+struct pv_entry *pv_table;
+int pv_table_npages;
 
 /*
  * The pools from which pmap structures and sub-structures are allocated.
@@ -88,7 +90,7 @@ struct pool pmap_pmap_pool;
 struct pool pmap_pv_pool;
 
 struct pool_allocator pmap_pv_page_allocator = {
-    pmap_pv_page_alloc, pmap_pv_page_free, 0,
+	pmap_pv_page_alloc, pmap_pv_page_free, 0,
 };
 
 #define	pmap_pv_alloc()		pool_get(&pmap_pv_pool, PR_NOWAIT)
@@ -127,7 +129,6 @@ pmap_pv_page_alloc(struct pool *pp, int flags)
 void
 pmap_pv_page_free(struct pool *pp, void *v)
 {
-	printf("pmap_pv_page_free(0x%X)\n", v);
 	uvm_pagefree(PHYS_TO_VM_PAGE(AVR32_P1_TO_PHYS((vaddr_t)v)));
 }
 
@@ -209,39 +210,39 @@ pmap_bootstrap(void)
 bool
 pmap_extract(pmap_t pmap, vaddr_t va, paddr_t *pap)
 {
-	panic("pmap_extract");
+	panic("pmap_extract: notyet");
 	return true;
 }
 
 void
 pmap_remove(pmap_t pmap, vaddr_t sva, vaddr_t eva)
 {
-	panic("pmap_remove");
+	panic("pmap_remove: notyet");
 }
 
 void
 pmap_copy(pmap_t dst_pmap, pmap_t src_pmap, vaddr_t dst_addr, vsize_t len, vaddr_t src_addr)
 {
-	panic("pamp_copy");
+	panic("pamp_copy: notyet");
 }
 
 void
 pmap_copy_page(paddr_t src, paddr_t dst)
 {
-	panic("pmap_copy_page");
+	panic("pmap_copy_page: notyet");
 }
 
 void
 pmap_page_protect(struct vm_page *pg, vm_prot_t prot)
 {
 
-	panic("pmap_page_protect");
+	panic("pmap_page_protect: notyet");
 }
 
 void 
 pmap_kremove(vaddr_t va, vsize_t len)
 {
-	panic("pmap_kremove");
+	panic("pmap_kremove: notyet");
 }
 
 void
@@ -249,7 +250,7 @@ pmap_kenter_pa(vaddr_t va, paddr_t pa, vm_prot_t prot)
 {
 	u_int tlblo;
 	u_int tlbhi;
-  	pt_entry_t *pte;
+	pt_entry_t *pte;
 
 #ifdef DEBUG
 	if (pmapdebug & (PDB_FOLLOW|PDB_ENTER))
@@ -291,7 +292,7 @@ pmap_deactivate(struct lwp *l)
 bool
 pmap_clear_modify(struct vm_page *pg)
 {
-	panic("pmap_clear_modify");
+	panic("pmap_clear_modify: notyet");
 }
 
 void
@@ -401,8 +402,7 @@ pmap_enter(pmap_t pmap, vaddr_t va, paddr_t pa, vm_prot_t prot, int flags)
 		enter_stats.managed++;
 #endif /* DEBUG */
 	} else {
-		panic("[XXXAVR32] %s %s %d Part of unmanaged memory", __FILE__,  __FUNCTION__, __LINE__);
-#if 0
+#if notyet
 		/*
 		 * Assumption: if it is not part of our managed memory
 		 * then it must be device memory which may be volatile.
@@ -448,13 +448,13 @@ pmap_enter(pmap_t pmap, vaddr_t va, paddr_t pa, vm_prot_t prot, int flags)
 
 		npte |= avr32_paddr_to_tlbpfn(pa)
 		      | AVR32_PG_GLOBAL | AVR32_PG_SIZE_4K;
-#if 0
+#if notyet
 		if (MIPS_HAS_R4K_MMU)
 			npte |= avr32_paddr_to_tlbpfn(pa) | AVR32_PG_GLOBAL;
 		else
 			npte |= avr32_paddr_to_tlbpfn(pa) |
 			    MIPS1_PG_V | MIPS1_PG_G;
-#endif /* 0 */
+#endif
 		if (wired) {
 			pmap->pm_stats.wired_count++;
 			npte |= AVR32_PTE_WIRED;
@@ -510,7 +510,7 @@ pmap_enter(pmap_t pmap, vaddr_t va, paddr_t pa, vm_prot_t prot, int flags)
 	 * MIPS pages in a MACH page.
 	 */
 	npte |= avr32_paddr_to_tlbpfn(pa) | AVR32_PG_SIZE_4K;
-#if 0
+#if notyet
 	if (MIPS_HAS_R4K_MMU)
 		npte |= avr32_paddr_to_tlbpfn(pa);
 	else
@@ -561,7 +561,7 @@ pmap_enter(pmap_t pmap, vaddr_t va, paddr_t pa, vm_prot_t prot, int flags)
 
 	dump_dtlb_6620();
 	return 0;
-#if 0
+#if notyet
 #ifdef MIPS3_PLUS	/* XXX mmu XXX */
 	if (MIPS_HAS_R4K_MMU && (prot == (VM_PROT_READ | VM_PROT_EXECUTE))) {
 #ifdef DEBUG
@@ -674,7 +674,7 @@ pmap_steal_memory(vsize_t size, vaddr_t *vstartp, vaddr_t *vendp)
 void
 pmap_unwire(pmap_t pmap, vaddr_t va)
 {
-	panic("pmap_unwire");
+	panic("pmap_unwire: notyet");
 }
 
 void
@@ -683,6 +683,7 @@ pmap_init(void)
 	vsize_t		s;
 	int		bank, i;
 	pv_entry_t	pv;     
+	uint32_t	mmucr;
 
 #ifdef DEBUG
 	if (pmapdebug & (PDB_FOLLOW|PDB_INIT))
@@ -709,20 +710,29 @@ pmap_init(void)
 	pool_setlowat(&pmap_pv_pool, pmap_pv_lowat);
 
 	/*
+	 * Configure the virtual memory machinery: enable the segmentation
+	 * feature of the MMU in order to instrument the P0 ... P4 memory
+	 * segments. Turn on paging and enforce private virtual memory mode,
+	 * i.e., enforce ASID checking when the global bit of the TLB entry
+	 * has not been asserted.
+	 */
+	mmucr = AVR32_MMUCR_PMMU	/* Enable paging */
+		| AVR32_MMUCR_TLB_INV	/* Invalidate the TLB */
+		| AVR32_MMUCR_SMMU	/* Turn on Px segmentation */
+		| AVR32_MMUCR_DLA(2)	/* Wire down the first two TLB items */
+		| AVR32_MMUCR_DRP(2);	/* TLB replacement pointer */
+	AVR32_MTSR(SR_MMUCR, mmucr); 
+
+	/*
 	 * Now it is safe to enable pv entry recording.
 	 */
 	pmap_initialized = true; 
-
-	if (1) {
-		unsigned mmucr = AVR32_MMUCR_PMMU | AVR32_MMUCR_SHARED | AVR32_MMUCR_TLB_INV | AVR32_MMUCR_SMMU | AVR32_MMUCR_DLA(2) | AVR32_MMUCR_DRP(2);
-		AVR32_MTSR(SR_MMUCR, mmucr); 
-	}
 }
 
 void
 pmap_destroy(pmap_t pmap)
 {
-	panic("pmap_destroy");
+	panic("pmap_destroy: notyet");
 }
 
 /*
@@ -795,26 +805,26 @@ pmap_create(void)
 void
 pmap_protect(pmap_t pmap, vaddr_t sva, vaddr_t eva, vm_prot_t prot)
 {
-	panic("pmap_protect");
+	panic("pmap_protect: notyet");
 }
 
 bool 
 pmap_clear_reference(struct vm_page *pg)
 {
-	panic("pmap_clear_reference");
+	panic("pmap_clear_reference: notyet");
 	return false;
 }
 
 void
 pmap_collect(pmap_t pmap)
 {
-	panic("pmap_collect");
+	panic("pmap_collect: notyet");
 }
 
 bool
 pmap_is_referenced(struct vm_page *pg)
 {
-	panic("pmap_is_referenced");
+	panic("pmap_is_referenced: notyet");
 }
 
 vaddr_t
@@ -870,9 +880,7 @@ pmap_enter_pv(pmap_t pmap, vaddr_t va, struct vm_page *pg, u_int *npte)
 		printf("pmap_enter: pv %p: was %lx/%p/%p\n",
 		    pv, pv->pv_va, pv->pv_pmap, pv->pv_next);
 #endif
-#if 0
 again:
-#endif /* 0 */
 	if (pv->pv_pmap == NULL) {
 
 		/*
@@ -890,7 +898,7 @@ again:
 		pv->pv_pmap = pmap;
 		pv->pv_next = NULL;
 	} else {
-#if 0
+#if notyet
 		if (mips_cache_virtual_alias) {
 			/*
 			 * There is at least one other VA mapping this page.
@@ -946,7 +954,7 @@ again:
 			}
 #endif	/* !MIPS3_NO_PV_UNCACHED */
 		}
-#endif /* 0 */
+#endif /* notyet */
 
 		/*
 		 * There is at least one other VA mapping this page.

@@ -33,6 +33,6 @@
 int
 sys_sysarch(struct lwp *l, const struct sys_sysarch_args *uap, register_t *retval)
 {
-	panic("sys_sysarch_args");
+	panic("sys_sysarch_args: notyet");
 	return 0;
 }

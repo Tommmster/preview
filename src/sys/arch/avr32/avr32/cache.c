@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -190,7 +192,7 @@ avr32_icache_sync_all(void)
 void
 avr32_icache_sync_range(vaddr_t sva, vsize_t size)
 {
-	panic("avr32_icache_sync_range");
+	panic("avr32_icache_sync_range: notyet");
 }
 
 void
@@ -295,5 +297,5 @@ avr32_dcache_inv_range(vaddr_t sva, vsize_t size)
 void
 avr32_dcache_wb_range(vaddr_t sva, vsize_t size)
 {
-	panic("avr32_dcache_wb_range");
+	panic("avr32_dcache_wb_range: notyet");
 }

@@ -1,4 +1,4 @@
-/* $NetBSD$ */
+/* 	$NetBSD$	 */
 
 /*-
  * Copyright (c) 2007 Ruslan Ermilov and Vsevolod Lobko.
@@ -269,14 +269,14 @@ at32usart_cnputc(dev_t dev, int ch)
 int
 at32usart_cngetc(dev_t dev)
 {
-	panic("at32usart_cngetc");
+	panic("at32usart_cngetc: notyet");
 	return (0);
 }
 
 void
 at32usart_cnpollc(dev_t dev, int on)
 {
-	panic("at32usart_cnpollc");
+	panic("at32usart_cnpollc: notyet");
 }
 
 /*

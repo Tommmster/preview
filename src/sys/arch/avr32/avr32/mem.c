@@ -193,6 +193,6 @@ mmrw(dev, uio, flags)
 	}
 	return (error);
 #else
-	panic("mmrw");
+	panic("mmrw: notyet");
 #endif
 }

@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -100,7 +102,7 @@ const char *trap_type[] = {
 void
 child_return(void *arg)
 {
-	panic("child_return");	
+	panic("child_return: notyet");	
 }
 
 /*
@@ -172,12 +174,12 @@ trap(unsigned int status, unsigned int cause, vaddr_t vaddr, vaddr_t opc,
 			}
 		}
 #else
-		panic("trap: dopanic");
+		panic("trap: dopanic: notyet");
 #endif
 		/*NOTREACHED*/
 	case T_TLB_MOD:
-		panic("trap: T_TLB_MOD");
-#if 0
+		panic("trap: T_TLB_MOD: notyet");
+#if notyet
 		if (KERNLAND(vaddr)) {
 			pt_entry_t *pte;
 			unsigned entry;
@@ -209,8 +211,8 @@ trap(unsigned int status, unsigned int cause, vaddr_t vaddr, vaddr_t opc,
 		/*FALLTHROUGH*/
 #endif
 	case T_TLB_MOD+T_USER: 
-		panic("trap: T_TLB_MOD+T_USER");
-#if 0
+		panic("trap: T_TLB_MOD+T_USER: notyet");
+#if notyet
 	    {
 		pt_entry_t *pte;
 		unsigned entry;
@@ -249,13 +251,13 @@ trap(unsigned int status, unsigned int cause, vaddr_t vaddr, vaddr_t opc,
 	    }
 #endif
 	case T_TLB_LD_MISS:
-		panic("trap: T_TLB_LD_MISS");
+		panic("trap: T_TLB_LD_MISS: notyet");
 	case T_TLB_ST_MISS:
 		ftype = (type == T_TLB_LD_MISS) ? VM_PROT_READ : VM_PROT_WRITE;
 		if (KERNLAND(vaddr))
 			goto kernelfault;
-		panic("trap: T_TLB_ST_MISS: pagefault");
-#if 0
+		panic("trap: T_TLB_ST_MISS: notyet");
+#if notyet
 		/*
 		 * It is an error for the kernel to access user space except
 		 * through the copyin/copyout routines.
@@ -270,14 +272,14 @@ trap(unsigned int status, unsigned int cause, vaddr_t vaddr, vaddr_t opc,
 		goto pagefault;
 #endif
 	case T_TLB_LD_MISS+T_USER:
-		panic("trap: T_TLB_LD_MISS+T_USER");
-#if 0
+		panic("trap: T_TLB_LD_MISS+T_USER: notyet");
+#if notyet
 		ftype = VM_PROT_READ;
 		goto pagefault;
 #endif
 	case T_TLB_ST_MISS+T_USER:
-		panic("trap: T_TLB_ST_MISS+T_USER");
-#if 0
+		panic("trap: T_TLB_ST_MISS+T_USER: notyet");
+#if notyet
 		ftype = VM_PROT_WRITE;
 #endif
 	pagefault: ;
@@ -364,14 +366,14 @@ trap(unsigned int status, unsigned int cause, vaddr_t vaddr, vaddr_t opc,
 	case T_ADDR_ERR_ST:	/* misaligned access */
 	case T_BUS_ERR_LD_ST:	/* BERR asserted to CPU */
 	copyfault:
-		panic("trap: copyfault");
-#if 0
+		panic("trap: copyfault: notyet");
+#if notyet
 		if (l == NULL || l->l_addr->u_pcb.pcb_onfault == NULL)
 			goto dopanic;
 		frame->tf_regs[TF_EPC] = (intptr_t)l->l_addr->u_pcb.pcb_onfault;
 		return; /* KERN */
 #endif
-#if 0
+#if notyet
 	case T_ADDR_ERR_LD+T_USER:	/* misaligned or kseg access */
 	case T_ADDR_ERR_ST+T_USER:	/* misaligned or kseg access */
 	case T_BUS_ERR_IFETCH+T_USER:	/* BERR asserted to CPU */
@@ -383,7 +385,7 @@ trap(unsigned int status, unsigned int cause, vaddr_t vaddr, vaddr_t opc,
 		break; /* SIGNAL */
 
 	case T_BREAK:
-		panic("trap: T_BREAK");
+		panic("trap: T_BREAK: notyet");
 #if defined(DDB)
 		kdb_trap(type, (avr32_reg_t *) frame);
 		return;	/* KERN */
@@ -481,7 +483,7 @@ trap(unsigned int status, unsigned int cause, vaddr_t vaddr, vaddr_t opc,
 		userret(l);
 		return; /* GEN */
 	case T_FPE+T_USER:
-		panic ("Floating point unused in AVR32 AP");
+		panic ("trap: T_FPE+T_USER: notyet");
 #if defined(SOFTFLOAT)
 		MachEmulateInst(status, cause, opc, l->l_md.md_regs);
 #elif !defined(NOFPU)
@@ -499,8 +501,8 @@ trap(unsigned int status, unsigned int cause, vaddr_t vaddr, vaddr_t opc,
 		break; /* SIGNAL */
 #endif
 	}
-	panic("trap: post-switch");
-#if 0
+	panic("trap: post-switch: notyet");
+#if notyet
 	fp = (struct frame *)l->l_md.md_regs;
 	fp->f_regs[_R_CAUSE] = cause;
 	fp->f_regs[_R_BADVADDR] = vaddr;

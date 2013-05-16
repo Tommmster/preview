@@ -1,5 +1,6 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -108,9 +109,9 @@ avr32_tlb_miss:
 	nop
 
 #ifdef DEBUG
-	pushm	r0-r3,r4-r7,r8-r9,r10,r11,r12, lr
+	pushm	r0-r3,r4-r7,r8-r9,r10,r11,r12,lr
 	rcall 	tlb_event
-	popm	r0-r3,r4-r7,r8-r9,r10,r11,r12, lr
+	popm	r0-r3,r4-r7,r8-r9,r10,r11,r12,lr
 #endif
 
 	lddpc	r11, L_VM_MIN_KERNEL_ADDRESS
@@ -120,26 +121,21 @@ avr32_tlb_miss:
 	lddpc	r11, L_VM_MIN_KERNEL_ADDRESS
 	sub	r12, r11
 
-	#Are we in range (should be within the number of Sysmapsize entries) ?
-
 	/*
-	 * Failing VPN should be lower than Sysmapsize
+	 * Failing VPN should be lower than Sysmapsize.
 	 */
-	lsr	r12, r12, 12 	# Failing VPN
-
-	lda.w	r11,Sysmapsize
-	ld.w	r11,r11[0]
-	
+	lsr	r12, r12, PGSHIFT
+	lda.w	r11, Sysmapsize
+	ld.w	r11, r11[0]
 
 	cp.w	r12, r11	
 	brge	tlbpanic	
 
-
+	/* Retrieve the PTE. */
 	lda.w	r11, Sysmap	
-	ld.w	r11,r11[0]
-
-	add	r11, r11, r12<<2 
-	ld.w	r12, r11[0] #retrieve the PTE
+	ld.w	r11, r11[0]
+	add	r11, r11, r12 << 2 
+	ld.w	r12, r11[0]
 
 	andh	r12, hi(~(AVR32_PTE_WIRED | AVR32_PTE_VALID)) 
 	orl	r12, lo(AVR32_PG_DIRTY) 
@@ -150,15 +146,12 @@ avr32_tlb_miss:
 
 	mfsr	r11, SR_TLBEHI
 	nop
-	nop
-	
-	andl	r11, 0xf000
-	orl	r11, 0x0200	#Set valid bit.
-	mtsr	SR_TLBEHI,r11
+	andl	r11, lo(AVR32_PG_VPN)
+	orl	r11, lo(AVR32_PG_VALID)
+	mtsr	SR_TLBEHI, r11
 	nop	
 	nop
 
-	#XXXAVR32 TODO Is any TLB bookkeping necessary ?
 	tlbw
 	nop
 	nop
@@ -190,7 +183,7 @@ usertlbmiss:
 	cp.w	r9, 0
 	breq	avr32_slow_fault
 
-	ld.w	r9, r9[0]	#base
+	ld.w	r9, r9[0]
 	mov	r11, r12
 
 	lsl	r11, PGSHIFT - 2
@@ -206,10 +199,8 @@ usertlbmiss:
 
 	mfsr	r11, SR_TLBEHI
 	nop
-	nop
-	
 	andl	r11, 0xf0ff	# Keep the asid
-	orl	r11, 0x0200	#Set valid bit.
+	orl	r11, lo(AVR32_PG_VALID)
 	mtsr	SR_TLBEHI, r11
 	nop	
 	nop
@@ -249,12 +240,14 @@ avr32_slow_fault:
 L_VM_MIN_KERNEL_ADDRESS:
 	.long VM_MIN_KERNEL_ADDRESS
 
+	.align 2
 handle_critical: 
 	mfsr	r12, SR_ECR
 	mfsr	r11, SR_RAR_EX
 	nop
 	rcall	handle_with_panic
 
+	.align 2
 supervisor_call_handler:
 	lda.w	r12, _inst_scall_msg
 	rcall	panic
@@ -262,6 +255,7 @@ supervisor_call_handler:
 _inst_scall_msg:
 	.string "inst.scall.text\n"
 	
+	.align 2
 multiple_tlbhit_handler:
 	lda.w	r12, _int_tlbmult_msg
 	rcall	panic
@@ -269,6 +263,7 @@ multiple_tlbhit_handler:
 _int_tlbmult_msg:
 	.string "int.tlbmult.text\n"
 
+	.align 2
 databus_datafetch_handler:
 	lda.w	r12, _dbus_dfetch_msg
 	mfsr	r11, SR_BEAR
@@ -278,6 +273,7 @@ databus_datafetch_handler:
 _dbus_dfetch_msg:
 	.string "dbus.dfetch.text\n"
 
+	.align 2
 databus_instfetch_handler:
 	lda.w	r12, _dbus_ifetch_msg
 	rcall	panic
@@ -285,6 +281,7 @@ databus_instfetch_handler:
 _dbus_ifetch_msg:
 	.string "dbus.ifetch.text\n"
 
+	.align 2
 external_nmi_handler:
 	lda.w	r12, _ext_nmi_msg
 	rcall	panic
@@ -292,6 +289,7 @@ external_nmi_handler:
 _ext_nmi_msg:
 	.string "ext.nmi.text\n"
 
+	.align 2
 itlb_protection_handler:
 	lda.w	r12, _itlb_iprot_msg
 	rcall	panic
@@ -299,6 +297,7 @@ itlb_protection_handler:
 _itlb_iprot_msg:
 	.string "itlb.iprot.text\n"
 
+	.align 2
 breakpoint_handler:
 	lda.w	r12, _ocd_break_msg
 	rcall	panic
@@ -306,6 +305,7 @@ breakpoint_handler:
 _ocd_break_msg:
 	.string "ocd.break.text\n"
 
+	.align 2
 illegal_opcode_handler:
 	lda.w	r12, _inst_opcode_msg
 	rcall	panic
@@ -313,6 +313,7 @@ illegal_opcode_handler:
 _inst_opcode_msg:
 	.string "inst.opcode.text\n"
 
+	.align 2
 unimplemented_instruction_handler:
 	lda.w	r12, _inst_unimp_msg
 	rcall	panic
@@ -320,6 +321,7 @@ unimplemented_instruction_handler:
 _inst_unimp_msg:
 	.string "inst.unimp.text\n"
 
+	.align 2
 privilege_violation_handler:
 	lda.w	r12, _inst_pviol_msg
 	rcall	panic
@@ -327,6 +329,7 @@ privilege_violation_handler:
 _inst_pviol_msg:
 	.string "inst.pviol.text\n"
 
+	.align 2
 copprocesor_absent_handler:
 	lda.w	r12, _inst_cop_msg
 	rcall	panic
@@ -334,6 +337,7 @@ copprocesor_absent_handler:
 _inst_cop_msg:
 	.string "inst.cop.text\n"
 
+	.align 2
 read_data_address_handler:
 	lda.w	r12, _dtlb_daddressr_msg
 	rcall	panic
@@ -341,6 +345,7 @@ read_data_address_handler:
 _dtlb_daddressr_msg:
 	.string "dtlb.daddressr.text\n"
 
+	.align 2
 write_data_address_handler:
 	lda.w	r12, _dtlb_daddressw_msg
 	rcall	panic
@@ -348,6 +353,7 @@ write_data_address_handler:
 _dtlb_daddressw_msg:
 	.string "dtlb.daddressw.text\n"
 
+	.align 2
 read_dtlb_protection_handler:
 	lda.w	r12, _dtlb_protr_msg
 	rcall	panic
@@ -355,6 +361,7 @@ read_dtlb_protection_handler:
 _dtlb_protr_msg:
 	.string "dtlb.protr.text\n"
 
+	.align 2
 write_dtlb_protection_handler:
 	lda.w	r12, _dtlb_protw_msg
 	rcall	panic
@@ -362,6 +369,7 @@ write_dtlb_protection_handler:
 _dtlb_protw_msg:
 	.string "dtlb.protw.text\n"	
 
+	.align 2
 dtlb_modified_handler:
 	lda.w	r12, _dtlb_modif_msg
 	rcall	panic
@@ -369,6 +377,7 @@ dtlb_modified_handler:
 _dtlb_modif_msg:
 	.string "dtlb.modif.text\n"
 
+	.align 2
 instruction_address_handler:
 	pushm	r10-r12, lr
 	mfsr	r12, SR_ECR		/* Faulting address */

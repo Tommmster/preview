@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -34,53 +36,53 @@
 void
 kcopyerr(void)
 {
-	panic("kcopyerr");
+	panic("kcopyerr: notyet");
 }
 
 int
 copyin(const void* src, void* dst, size_t size)
 {
-	panic("copyin");
+	panic("copyin: notyet");
 	return 0;
 }
 
 int
 copyoutstr(const void *uaddr, void *kaddr, size_t maxlen, size_t *lencopied)
 {
-	panic("copyoutstr");
+	panic("copyoutstr: notyet");
 	return 0;
 }
 
 int
 subyte(void *s, int b)
 {
-	panic("subyte");
+	panic("subyte: notyet");
 	return 0;
 }
 
 int
 suswintr(void *s, short h)
 {
-	panic("suswintr");
+	panic("suswintr: notyet");
 	return 0;
 }
 
 int
 fuswintr(const void *addr)
 {
-	panic("fuswintr");
+	panic("fuswintr: notyet");
 	return 0;
 }
 
 int
 fswintrberr(void)
 {
-	panic("fswintrberr");
+	panic("fswintrberr: notyet");
 	return 0;
 }
 
 void
 baderr(void)
 {
-	panic("baderr");
+	panic("baderr: notyet");
 }

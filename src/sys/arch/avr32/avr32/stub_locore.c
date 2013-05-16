@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -63,37 +65,7 @@ dump_rx(unsigned int seq, unsigned int reg)
 void*
 setfunc_trampoline(void)
 {
-	panic("setfunc_trampoline");
-}
-
-int
-_splget(void)
-{
-	return 0;
-}
-
-int
-_splset(int x)
-{
-
-	return 0;
-}
-
-int
-_splraise(int x)
-{
-	return 0;
-}
-
-int
-_spllower(int x)
-{
-	return 0;
-}
-
-void
-_splnone(void)
-{
+	panic("setfunc_trampoline: notyet");
 }
 
 void

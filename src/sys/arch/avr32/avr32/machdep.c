@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -303,7 +305,14 @@ cpu_startup()
 void
 cpu_reboot(volatile int howto, char *bootsr)
 {
-	panic("cpu_reboot");
+	/*
+	 * XXX Cannot panic() here due to recursion issues. This routine
+	 * needs extensive overhaaul, for now we just print a message and
+	 * halt. 
+	 */
+	printf("cpu_reboot\n");
+	while (1)
+		;
 }
 
 /*
@@ -458,7 +467,7 @@ cpu_need_resched(struct cpu_info *ci, int flags)
 void
 cpu_idle(void)
 {
-	panic("cpu_idle");
+	panic("cpu_idle: notyet");
 }
 
 bool
@@ -470,38 +479,38 @@ cpu_intr_p(void)
 void
 cpu_need_proftick(struct lwp *l)
 {
-	panic("cpu_need_proftick");
+	panic("cpu_need_proftick: notyet");
 }
 
 void
 cpu_signotify(struct lwp *l)
 {
-	panic("cpu_signotify");
+	panic("cpu_signotify: notyet");
 }
 
 void
 cpu_getmcontext(struct lwp *l, mcontext_t *mcp, unsigned int *flags)
 {	
-	panic("cpu_getmcontext");
+	panic("cpu_getmcontext: notyet");
 }
 
 int
 cpu_setmcontext(struct lwp *l, const mcontext_t *mcp, unsigned int flags)
 {
-	panic("cpu_setmcontext");
+	panic("cpu_setmcontext: notyet");
 	return 0;
 }
 
 void
 setregs(struct lwp *l, struct exec_package *pack, u_long stack)
 {
-	panic("setregs");
+	panic("setregs: notyet");
 }
 
 void
 startlwp(void *args)
 {
-	panic("startlwp");
+	panic("startlwp: notyet");
 }
 
 void

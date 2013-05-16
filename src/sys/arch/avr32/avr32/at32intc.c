@@ -1,5 +1,7 @@
-/*-                                                                                                                                                                                   
- * Copyright (c) 2008 The NetBSD Foundation, Inc.
+/* 	$NetBSD$	 */
+
+/*-
+ * Copyright (c) 2013 The NetBSD Foundation, Inc.
  * All rights reserved.
  * 
  * This code is derived from software contributed to The NetBSD Foundation
@@ -249,16 +251,6 @@ at32intc_cpu_intr(int ilvl, uint32_t st, uint32_t pc)
 	uint32_t igrp;
 	int line;
 	int b;
-
-	if (0) {
-static int w;
-if (((w++) % 1) == 0) {
-		char lch = (ilvl >= 0 && ilvl <= 3) ?  '0' + ilvl : '?';
-		usart_write_one('<');
-		usart_write_one(('a' + (w % 32)));
-		usart_write_one('>');
-}
-	}
 
 	ci = curcpu();
 	ci->ci_idepth++;
