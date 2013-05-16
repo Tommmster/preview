@@ -92,10 +92,10 @@ kcopy:
 	.align 1
 
 copystr:
-	stm	--sp, r7,r8,lr
+	stm	--sp, r7,lr
 
 	mov	r7, r10
-	cp.w	r10, 0
+	cp.w	r7, 0
 	breq	2f	/* No characters to copy */
 
 1:	ld.ub	r8, r12[0]
@@ -108,7 +108,7 @@ copystr:
 	breq	4f
 
 	cp.w	r10, 0	/* More to copy? */
-	breq	1b
+	brne	1b
 	
 	/* kfaddr is not NIL- terminated */
 	mov	r12, ENAMETOOLONG
@@ -126,7 +126,7 @@ copystr:
 4:	mov	r12, 0
 	bral	2b
 
-3:	ldm	sp++, r7,r8,pc
+3:	ldm	sp++, r7,pc
 	.size 	copystr, . - copystr
 
 /*          
@@ -140,7 +140,7 @@ copystr:
 	.align 1
 
 copyout:
-#if notyet
+#if 1
 	stm	--sp, lr
 
 	/* 

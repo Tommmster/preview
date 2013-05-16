@@ -222,9 +222,11 @@ avr32_slow_fault:
 	stm	r12, r0-r8,lr,sp
 
 	/* Invoke the trap handler. */
-	mfsr	r12, SR_ECR
-	mfsr	r11, SR_TLBEAR
-	mov	r10, sp
+	mfsr	r12, SR_STATUS
+	mfsr	r11, SR_ECR
+	mfsr	r10, SR_TLBEAR
+	mov	r9, SR_RAR_EX 
+	mov	r8, sp
 	rcall	trap
 
 	/* Now we return: restore the register values.*/
